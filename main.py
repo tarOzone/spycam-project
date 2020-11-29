@@ -57,7 +57,7 @@ def main():
 
     user = auth.sign_in_with_email_and_password(os.getenv('EMAIL'), os.getenv('PASSWORD'))
 
-    image = generate_random_image(ext=".jpg")
+    image = generate_random_image()
     upload_data(storage=storage, database=database, content=image, id_token=user["idToken"])
 
     # retrieve(database)
