@@ -23,12 +23,12 @@ def notify():
     pass
 
 
-def upload_image(storage, content: Union[str, bytes]) -> dict:
-    return storage.child(f"/saved-image_{_get_datetime_string()}.jpg").put(content)
+def upload_image(storage, content: Union[str, bytes], id_token: str) -> dict:
+    return storage.child(f"/saved-image_{_get_datetime_string()}.jpg").put(content, id_token)
 
 
 def upload_data(storage, database, content: Union[str, bytes], id_token: str):
-    metadata = upload_image(storage, content)
+    metadata = upload_image(storage, content, id_token)
     url = storage.child(f"/{metadata['name']}").get_url(metadata['downloadTokens'])
     data = {
         'timeCreated': metadata['timeCreated'],
@@ -57,10 +57,10 @@ def main():
 
     user = auth.sign_in_with_email_and_password(os.getenv('EMAIL'), os.getenv('PASSWORD'))
 
-    image = generate_random_image(ext=".png")
+    image = generate_random_image(ext=".jpg")
     upload_data(storage=storage, database=database, content=image, id_token=user["idToken"])
 
-    retrieve(database)
+    # retrieve(database)
 
 
 if __name__ == '__main__':
