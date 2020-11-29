@@ -44,8 +44,8 @@ def upload_data(storage, database, content: Union[str, bytes], id_token: str):
 
 
 def retrieve(database):
-    all_users = database.get()
-    for user in all_users.each():
+    items = database.get()
+    for user in items.each():
         print(user.key(), ":", json.dumps(user.val(), indent=4))
 
 
