@@ -3,6 +3,8 @@ import pyrebase
 from typing import Union
 from datetime import datetime
 
+from data.data_generator import generate_random_image
+
 
 def _get_datetime_string() -> str:
     return datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S')
@@ -40,10 +42,9 @@ def main():
     storage = firebase.storage()
     database = firebase.database()
 
-    with open("./data/sample-image.jpg", "rb") as f:
-        content = f.read()
+    image = generate_random_image(ext=".png")
 
-    upload_data(storage=storage, database=database, content=content)
+    upload_data(storage=storage, database=database, content=image)
     notify()
 
     # reterving data using loops
