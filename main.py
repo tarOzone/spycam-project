@@ -46,7 +46,7 @@ def upload_data(storage, database, content: Union[str, bytes], id_token: str):
 def retrieve(database):
     all_users = database.get()
     for user in all_users.each():
-        print(user.val())
+        print(user.key(), ":", json.dumps(user.val(), indent=4))
 
 
 def main():
@@ -59,6 +59,8 @@ def main():
 
     image = generate_random_image(ext=".png")
     upload_data(storage=storage, database=database, content=image, id_token=user["idToken"])
+
+    retrieve(database)
 
 
 if __name__ == '__main__':
