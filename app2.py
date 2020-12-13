@@ -16,9 +16,8 @@ GPIO.setup(pir_gpio_pin, GPIO.IN)
 
 def capture_and_upload():
     for _ in range(10):
-        filename: str = camera.get_filename(ext='jpg')
-        camera.capture(filename)
-        camera.upload_image(content=filename)
+        camera.capture()
+        camera.upload_image()
 
 
 def callback(channel):
