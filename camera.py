@@ -29,6 +29,7 @@ class CameraCapture:
         self._user = self._auth.sign_in_with_email_and_password(os.getenv('EMAIL'), os.getenv('PASSWORD'))
 
         self.buffer = np.empty((CameraCapture.height, CameraCapture.width, 3), dtype=np.uint8)
+        self.output: bytes = None
 
     def capture(self, filename: str):
         self.camera.capture(self.buffer, 'rgb')

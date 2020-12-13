@@ -1,7 +1,7 @@
 import os
 import RPi.GPIO as GPIO
 from time import time
-from camera import camera
+from camera2 import camera
 from datetime import datetime
 from dotenv import load_dotenv
 
