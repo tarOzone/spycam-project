@@ -23,7 +23,7 @@ def capture_and_upload():
 
 
 def main():
-    pir: MotionSensor = MotionSensor(4)
+    pir: MotionSensor = MotionSensor(f"BOARD{pir_gpio_pin}")
     print("test started...")
     try:
         while True:
