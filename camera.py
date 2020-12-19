@@ -62,7 +62,7 @@ class CameraCapture:
 
     @staticmethod
     def _get_datetime_string() -> str:
-        return datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S')
+        return datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S.%f')
 
     @staticmethod
     def _read_firebase_config() -> dict:
@@ -82,17 +82,3 @@ class CameraCapture:
     @staticmethod
     def _get_filename(ext: str = 'jpg') -> str:
         return f'/saved-image_{CameraCapture._get_datetime_string()}.{ext}'
-
-
-# instantiate here
-camera: CameraCapture = CameraCapture()
-
-
-def run():
-    filename: str = camera.get_filename(ext='jpg')
-    camera.capture(filename)
-    camera.upload_image(content=filename)
-
-
-if __name__ == '__main__':
-    run()
