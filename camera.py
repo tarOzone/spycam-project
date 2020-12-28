@@ -22,6 +22,7 @@ class CameraCapture:
     def __init__(self):
         self.camera: PiCamera = PiCamera()
         self.camera.resolution = (CameraCapture.width, CameraCapture.height)
+        self.camera.rotation = 180
 
         self._firebase = pyrebase.initialize_app(self._read_firebase_config())
         self._storage = self._firebase.storage()
@@ -61,8 +62,11 @@ class CameraCapture:
         return "data/" + CameraCapture._get_filename(ext)
 
     @staticmethod
-    def _get_datetime_string() -> str:
-        return datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S.%f')
+    def _get_datetime_string(milliseconds: bool = True) -> str:
+        format: str = "%Y-%m-%d_%H-%M-%S"
+        if milliseconds:
+            format += "-%f"
+        return datetime.utcnow().strftime(format)
 
     @staticmethod
     def _read_firebase_config() -> dict:

@@ -20,14 +20,13 @@ GPIO.setup(pir_gpio_pin, GPIO.IN)
 def capture_and_uploads(n: int):
     for _ in range(n):
         start = time()
-        content: bytes = camera.capture()
-        Thread(target=camera.upload_image, args=(content,)).start()
+        camera.upload()
         print(f"uploading done in {time() - start}")
 
 
 def callback(channel):
     print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}:", "Intruders found\a")
-    capture_and_uploads(10)
+    capture_and_uploads(3)
 
 
 GPIO.add_event_detect(
