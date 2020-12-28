@@ -1,7 +1,7 @@
 import io
 import cv2
 import numpy as np
-from typing import Iterable, List
+from typing import List
 from threading import Lock
 from camera import CameraCapture
 from concurrent.futures import ThreadPoolExecutor
