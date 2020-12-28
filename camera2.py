@@ -1,7 +1,7 @@
 import io
 import cv2
 import numpy as np
-from typing import List
+from typing import Iterable, List
 from threading import Lock
 from camera import CameraCapture
 from concurrent.futures import ThreadPoolExecutor
@@ -27,22 +27,29 @@ class CameraCapture2(CameraCapture):
 
     def upload(self, sequences: int = 15):
         images: List[np.ndarray] = self.capture(sequences)
-        self.excecutor.map(self._upload, images)
+        child_path: list = CameraCapture._get_datetime_string()
+        filenames: list = [f"{child_path}/{str(i).zfill(3)}.jpg" for i in range(1, len(images) + 1)]
+
+        data = zip(images, filenames)
+        self.excecutor.map(self._upload, data)
     
     @staticmethod
     def _get_buffer() -> np.ndarray:
         return np.empty((CameraCapture.height, CameraCapture.width, 3), dtype=np.uint8)
     
-    def _upload(self, image: np.ndarray):
+    # def _upload(self, image: np.ndarray):
+    def _upload(self, data):
+        image, filename = data
         image_bytes: bytes = transform_image(image)
-        self._upload_image_bytes_to_firebase_storage(image_bytes)
+        self._upload_image_bytes_to_firebase_storage(image_bytes, filename)
 
-    def _upload_image_bytes_to_firebase_storage(self, image: bytes) -> dict:
-        self.lock.acquire()
-        try:
-            filename: str = CameraCapture._get_filename()
-        finally:
-            self.lock.release()
+    # def _upload_image_bytes_to_firebase_storage(self, image: bytes) -> dict:
+    def _upload_image_bytes_to_firebase_storage(self, image: bytes, filename: str) -> dict:
+        # self.lock.acquire()
+        # try:
+        #     filename: str = CameraCapture._get_filename()
+        # finally:
+        #     self.lock.release()
         return self._storage.child(filename).put(image, self._user['idToken'])
 
     def close(self):
