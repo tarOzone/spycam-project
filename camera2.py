@@ -1,6 +1,6 @@
 import io
+import cv2
 import numpy as np
-from PIL import Image
 from typing import List
 from threading import Lock
 from camera import CameraCapture
@@ -8,10 +8,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 
 def transform_image(image: np.ndarray) -> bytes:
-    output: io.BytesIO = io.BytesIO()
-    image = Image.fromarray(image)
-    image.save(output, format="JPEG")
-    return bytes(output.getbuffer())
+    _, image_buffer = cv2.imencode(".jpg", image)
+    return image_buffer.tobytes()
 
 
 class CameraCapture2(CameraCapture):
