@@ -16,7 +16,6 @@ load_dotenv()
 
 class CameraCapture:
 
-    quality = int(os.getenv('QUALITY'))
     width, height = (int(os.getenv('RESOLUTION_WIDTH')), int(os.getenv('RESOLUTION_HEIGHT')))
 
     def __init__(self):
