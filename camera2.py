@@ -1,6 +1,6 @@
 import io
-import cv2
 import numpy as np
+from PIL import Image
 from typing import List
 from threading import Lock
 from camera import CameraCapture
@@ -8,8 +8,10 @@ from concurrent.futures import ThreadPoolExecutor
 
 
 def transform_image(image: np.ndarray) -> bytes:
-    _, image_buffer = cv2.imencode(".jpg", image)
-    return image_buffer.tobytes()
+    output: io.BytesIO = io.BytesIO()
+    image = Image.fromarray(image)
+    image.save(output, format="JPEG")
+    return bytes(output.getbuffer())
 
 
 class CameraCapture2(CameraCapture):
@@ -37,19 +39,12 @@ class CameraCapture2(CameraCapture):
     def _get_buffer() -> np.ndarray:
         return np.empty((CameraCapture.height, CameraCapture.width, 3), dtype=np.uint8)
     
-    # def _upload(self, image: np.ndarray):
     def _upload(self, data):
         image, filename = data
         image_bytes: bytes = transform_image(image)
         self._upload_image_bytes_to_firebase_storage(image_bytes, filename)
 
-    # def _upload_image_bytes_to_firebase_storage(self, image: bytes) -> dict:
     def _upload_image_bytes_to_firebase_storage(self, image: bytes, filename: str) -> dict:
-        # self.lock.acquire()
-        # try:
-        #     filename: str = CameraCapture._get_filename()
-        # finally:
-        #     self.lock.release()
         return self._storage.child(filename).put(image, self._user['idToken'])
 
     def close(self):
