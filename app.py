@@ -1,14 +1,14 @@
 import os
 from time import time
 import RPi.GPIO as GPIO
-from camera2 import CameraCapture2
+from camera_rapid import CameraCaptureRapid
 from datetime import datetime
 from dotenv import load_dotenv
 
 
 load_dotenv()
 pir_gpio_pin: int = int(os.getenv('PIR_GPIO_PIN'))
-camera: CameraCapture2 = CameraCapture2()
+camera: CameraCaptureRapid = CameraCaptureRapid()
 
 
 GPIO.setwarnings(False)
@@ -23,7 +23,7 @@ def capture_and_uploads(n: int):
         print(f"uploading done in {time() - start}")
 
 
-def callback(channel):
+def callback(_):
     print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}:", "Intruders found\a")
     capture_and_uploads(3)
 
